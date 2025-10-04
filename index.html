@@ -730,163 +730,193 @@
     </div>
 
     <script>
-        // Hamburger Menu
-const hamburger = document.getElementById('hamburger');
-const navLinks = document.getElementById('navLinks');
+// Función para inicializar todo cuando el DOM esté listo
+function initializeApp() {
+    // Hamburger Menu
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
 
-hamburger.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-});
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
 
-// Cerrar menú al hacer clic en un enlace
-document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', () => {
-        navLinks.classList.remove('active');
+        // Cerrar menú al hacer clic en un enlace
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+    }
+
+    // Generar galería con imágenes placeholder
+    const gallery = document.getElementById('gallery');
+    if (gallery) {
+        const categories = ['portrait', 'portrait', 'fashion', 'wedding', 'nature', 'portrait', 'fashion', 'wedding', 'nature', 'fashion', 'portrait', 'nature', 'wedding', 'fashion', 'nature', 'portrait'];
+        
+        categories.forEach((cat, index) => {
+            const item = document.createElement('div');
+            item.className = `gallery-item ${cat}`;
+            item.innerHTML = `<img src="https://picsum.photos/400/400?random=${index}" alt="${cat}">`;
+            item.onclick = () => openModal(item.querySelector('img').src);
+            gallery.appendChild(item);
+        });
+    }
+
+    // Filtros de galería
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const galleryItems = document.querySelectorAll('.gallery-item');
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Actualizar botón activo
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const filter = btn.getAttribute('data-filter');
+
+            galleryItems.forEach(item => {
+                if (filter === 'all' || item.classList.contains(filter)) {
+                    item.style.display = 'block';
+                    setTimeout(() => item.style.opacity = '1', 10);
+                } else {
+                    item.style.opacity = '0';
+                    setTimeout(() => item.style.display = 'none', 300);
+                }
+            });
+        });
     });
-});
 
-// Generar galería con imágenes placeholder
-const categories = ['portrait', 'portrait', 'fashion', 'wedding', 'nature', 'portrait', 'fashion', 'wedding', 'nature', 'fashion', 'portrait', 'nature', 'wedding', 'fashion', 'nature', 'portrait'];
-const gallery = document.getElementById('gallery');
+    // Modal
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modalImg');
 
-categories.forEach((cat, index) => {
-    const item = document.createElement('div');
-    item.className = `gallery-item ${cat}`;
-    item.innerHTML = `<img src="https://picsum.photos/400/400?random=${index}" alt="${cat}">`;
-    item.onclick = () => openModal(item.querySelector('img').src);
-    gallery.appendChild(item);
-});
+    window.openModal = function(src) {
+        if (modal && modalImg) {
+            modal.style.display = 'flex';
+            modalImg.src = src;
+            document.body.style.overflow = 'hidden';
+        }
+    };
 
-// Filtros de galería
-const filterBtns = document.querySelectorAll('.filter-btn');
-const galleryItems = document.querySelectorAll('.gallery-item');
+    window.closeModal = function() {
+        if (modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    };
 
-filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        // Actualizar botón activo
-        filterBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+    // Cerrar modal al hacer clic fuera de la imagen
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                window.closeModal();
+            }
+        });
+    }
 
-        const filter = btn.getAttribute('data-filter');
-
-        galleryItems.forEach(item => {
-            if (filter === 'all' || item.classList.contains(filter)) {
-                item.style.display = 'block';
-                setTimeout(() => item.style.opacity = '1', 10);
-            } else {
-                item.style.opacity = '0';
-                setTimeout(() => item.style.display = 'none', 300);
+    // Scroll suave
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         });
     });
-});
 
-// Modal
-const modal = document.getElementById('modal');
-const modalImg = document.getElementById('modalImg');
-
-function openModal(src) {
-    modal.style.display = 'flex';
-    modalImg.src = src;
-    document.body.style.overflow = 'hidden';
-}
-
-function closeModal() {
-    modal.style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
-
-// Cerrar modal al hacer clic fuera de la imagen
-modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-        closeModal();
+    // Función para animar los números del contador
+    function animateCounter(element, target, duration = 2000) {
+        const start = 0;
+        const increment = target / (duration / 16);
+        let current = start;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                element.textContent = target + (element.dataset.hasPlus ? '+' : '');
+                clearInterval(timer);
+            } else {
+                element.textContent = Math.floor(current) + (element.dataset.hasPlus ? '+' : '');
+            }
+        }, 16);
     }
-});
 
-// Scroll suave
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
+    // Animación al hacer scroll (SECCIONES GENERALES)
+    const sectionObserverOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animation = 'fadeInUp 1s ease forwards';
+            }
+        });
+    }, sectionObserverOptions);
+
+    document.querySelectorAll('.portfolio, .cta, .social').forEach(section => {
+        if (section) {
+            sectionObserver.observe(section);
         }
     });
-});
 
-// Función para animar los números del contador
-function animateCounter(element, target, duration = 2000) {
-    const start = 0;
-    const increment = target / (duration / 16);
-    let current = start;
-    
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            element.textContent = target + (element.dataset.hasPlus ? '+' : '');
-            clearInterval(timer);
-        } else {
-            element.textContent = Math.floor(current) + (element.dataset.hasPlus ? '+' : '');
-        }
-    }, 16);
+    // Observer específico para el CONTADOR (sección "about")
+    const counterObserverOptions = {
+        threshold: 0.3, // Reducido para móviles
+        rootMargin: '0px'
+    };
+
+    let counterAnimated = false; // Evitar múltiples animaciones
+
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !counterAnimated) {
+                counterAnimated = true;
+                const statNumbers = entry.target.querySelectorAll('.stat-number');
+                
+                statNumbers.forEach(stat => {
+                    const text = stat.textContent.trim();
+                    const hasPlus = text.includes('+');
+                    const number = parseInt(text.replace('+', ''));
+                    
+                    if (hasPlus) {
+                        stat.dataset.hasPlus = 'true';
+                    }
+                    
+                    // Pequeño delay para cada contador
+                    setTimeout(() => {
+                        animateCounter(stat, number);
+                    }, 100);
+                });
+                
+                counterObserver.unobserve(entry.target);
+            }
+        });
+    }, counterObserverOptions);
+
+    // Observar la sección "about" para el contador
+    const aboutSection = document.querySelector('.about');
+    if (aboutSection) {
+        // También aplicar la animación fadeInUp
+        sectionObserver.observe(aboutSection);
+        // Y observar para el contador
+        counterObserver.observe(aboutSection);
+    }
 }
 
-// Animación al hacer scroll (SECCIONES GENERALES)
-const sectionObserverOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -100px 0px'
-};
-
-const sectionObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.animation = 'fadeInUp 1s ease forwards';
-        }
-    });
-}, sectionObserverOptions);
-
-document.querySelectorAll('.portfolio, .cta, .social').forEach(section => {
-    sectionObserver.observe(section);
-});
-
-// Observer específico para el CONTADOR (sección "about")
-const counterObserverOptions = {
-    threshold: 0.5,
-    rootMargin: '0px'
-};
-
-const counterObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const statNumbers = entry.target.querySelectorAll('.stat-number');
-            
-            statNumbers.forEach(stat => {
-                const text = stat.textContent.trim();
-                const hasPlus = text.includes('+');
-                const number = parseInt(text.replace('+', ''));
-                
-                if (hasPlus) {
-                    stat.dataset.hasPlus = 'true';
-                }
-                
-                animateCounter(stat, number);
-            });
-            
-            counterObserver.unobserve(entry.target);
-        }
-    });
-}, counterObserverOptions);
-
-// Observar la sección "about" para el contador
-const aboutSection = document.querySelector('.about');
-if (aboutSection) {
-    // También aplicar la animación fadeInUp
-    sectionObserver.observe(aboutSection);
-    // Y observar para el contador
-    counterObserver.observe(aboutSection);
+// Asegurar que el código se ejecute cuando el DOM esté listo
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeApp);
+} else {
+    // El DOM ya está listo, ejecutar inmediatamente
+    initializeApp();
 }
     </script>
 </body>
 
 </html>
+
 
