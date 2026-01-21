@@ -316,17 +316,17 @@
 
 /* GALERÍA */
 .gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas exactas en PC/Netbook */
+    gap: 16px;
 }
 
 .gallery-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  cursor: pointer;
-  display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+    display: block;
 }
 
 /* LIGHTBOX FONDO */
@@ -1142,8 +1142,8 @@
             <div class="about-content">
                 <p>Con más de 10 años de experiencia en fotografía profesional, he tenido el privilegio de trabajar con clientes increíbles y capturar momentos inolvidables. Mi enfoque se centra en la autenticidad, la emoción y la belleza natural de cada escena.</p>
                 <p>Especializada en retratos, moda, bodas y fotografía artística, mi objetivo es crear imágenes que no solo documenten momentos, sino que cuenten historias que perduren para siempre.</p>
-             <!--   <div class="about-stats">
-                    <div class="stat-item">
+                <div class="about-stats">
+                 <!--   <div class="stat-item">
                         <span class="stat-number">500+</span>
                         <span class="stat-label">Proyectos</span>
                     </div>
@@ -1260,6 +1260,9 @@ if (hamburger && navLinks) {
 // ===============================
 // 🖼️ GALERÍA CLOUDINARY + LIGHTBOX
 // ===============================
+// ===============================
+// 🖼️ GALERÍA CLOUDINARY + LIGHTBOX
+// ===============================
 const gallery = document.getElementById('gallery');
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightboxImg');
@@ -1268,27 +1271,41 @@ const lightboxDesc = document.getElementById('lightboxDesc');
 
 const cloudName = 'djhgvjclq';
 
+// ====== AQUÍ PONÉ TUS 33 IMÁGENES ======
 const images = [
-  {
-    id: 'v1768954054/1',
-    title: 'Villa Ballester',
-    desc: 'Fotografía urbana'
-  },
-  {
-    id: 'v1768954057/2_gqnjv1',
-    title: 'Villa Ballester',
-    desc: 'Luz natural y arquitectura'
-  },
-  {
-    id: 'v1768954148/3_ehydwf',
-    title: 'Villa Ballester',
-    desc: 'Composición y textura'
-  },
-  {
-    id: 'v1768954146/4_ahwdz7',
-    title: 'Villa Ballester',
-    desc: 'Escena urbana'
-  }
+  { id: 'v1768963199/1', title: 'Villa Ballester', desc: 'Foto 1' },
+  { id: 'v1768963205/2', title: 'Villa Ballester', desc: 'Foto 2' },
+  { id: 'v1768963210/3', title: 'Villa Ballester', desc: 'Foto 3' },
+  { id: 'v1768963215/4', title: 'Villa Ballester', desc: 'Foto 4' },
+  { id: 'v1768963220/5', title: 'Villa Ballester', desc: 'Foto 5' },
+  { id: 'v1768963225/6', title: 'Villa Ballester', desc: 'Foto 6' },
+  { id: 'v1768963230/7', title: 'Villa Ballester', desc: 'Foto 7' },
+  { id: 'v1768963235/8', title: 'Villa Ballester', desc: 'Foto 8' },
+  { id: 'v1768963240/9', title: 'Villa Ballester', desc: 'Foto 9' },
+  { id: 'v1768963245/10', title: 'Villa Ballester', desc: 'Foto 10' },
+  { id: 'v1768963250/11', title: 'Villa Ballester', desc: 'Foto 11' },
+  { id: 'v1768963255/12', title: 'Villa Ballester', desc: 'Foto 12' },
+  { id: 'v1768963260/13', title: 'Villa Ballester', desc: 'Foto 13' },
+  { id: 'v1768963265/14', title: 'Villa Ballester', desc: 'Foto 14' },
+  { id: 'v1768963270/15', title: 'Villa Ballester', desc: 'Foto 15' },
+  { id: 'v1768963275/16', title: 'Villa Ballester', desc: 'Foto 16' },
+  { id: 'v1768963280/17', title: 'Villa Ballester', desc: 'Foto 17' },
+  { id: 'v1768963285/18', title: 'Villa Ballester', desc: 'Foto 18' },
+  { id: 'v1768963290/19', title: 'Villa Ballester', desc: 'Foto 19' },
+  { id: 'v1768963295/20', title: 'Villa Ballester', desc: 'Foto 20' },
+  { id: 'v1768963300/21', title: 'Villa Ballester', desc: 'Foto 21' },
+  { id: 'v1768963305/22', title: 'Villa Ballester', desc: 'Foto 22' },
+  { id: 'v1768963310/23', title: 'Villa Ballester', desc: 'Foto 23' },
+  { id: 'v1768963315/24', title: 'Villa Ballester', desc: 'Foto 24' },
+  { id: 'v1768963320/25', title: 'Villa Ballester', desc: 'Foto 25' },
+  { id: 'v1768963325/26', title: 'Villa Ballester', desc: 'Foto 26' },
+  { id: 'v1768963330/27', title: 'Villa Ballester', desc: 'Foto 27' },
+  { id: 'v1768963335/28', title: 'Villa Ballester', desc: 'Foto 28' },
+  { id: 'v1768963340/29', title: 'Villa Ballester', desc: 'Foto 29' },
+  { id: 'v1768963345/30', title: 'Villa Ballester', desc: 'Foto 30' },
+  { id: 'v1768963350/31', title: 'Villa Ballester', desc: 'Foto 31' },
+  { id: 'v1768963355/32', title: 'Villa Ballester', desc: 'Foto 32' },
+  { id: 'v1768963360/33', title: 'Villa Ballester', desc: 'Foto 33' }
 ];
 
 let currentIndex = 0;
@@ -1343,6 +1360,7 @@ function prevImage() {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeLightbox();
 });
+
 
 // ===============================
 // 🎛️ FILTROS (preparados)
@@ -1423,7 +1441,9 @@ function animateCounter(element, target, duration = 2000) {
   }
 
   requestAnimationFrame(update);
+
 }
+// ===============================
 
 function startCounterAnimation() {
   if (counterHasAnimated) return;
